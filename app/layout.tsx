@@ -25,8 +25,11 @@ const lato = Lato({
 });
 
 export const metadata: Metadata = {
-  title: "Tina",
-  description: "Tina Cloud Starter",
+  title: "Thomas Sepanosian",
+  description: "Personal website and blog of Thomas Sepanosian — research in IoT, AI, and wearable computing.",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
