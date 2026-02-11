@@ -23,14 +23,7 @@ export const Header = () => {
                 href="/"
                 aria-label="home"
                 className="flex items-center space-x-2">
-                <Icon
-                  parentColor={header.color!}
-                  data={{
-                    name: header.icon!.name,
-                    color: header.icon!.color,
-                    style: header.icon!.style,
-                  }}
-                />{" "}
+                <span className="text-2xl" aria-hidden="true">🎾</span>
                 <span>
                   {header.name}
                 </span>
