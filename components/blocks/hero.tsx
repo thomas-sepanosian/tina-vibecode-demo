@@ -1,18 +1,19 @@
 'use client';
-import { iconSchema } from '@/tina/fields/icon';
 import Image from 'next/image';
 import Link from 'next/link';
 import * as React from 'react';
 import type { Template } from 'tinacms';
 import { tinaField } from 'tinacms/dist/react';
-import { PageBlocksHero, PageBlocksHeroImage } from '../../tina/__generated__/types';
+import { PageBlocksHero } from '../../tina/__generated__/types';
 import { Icon } from '../icon';
 import { Section, sectionBlockSchemaField } from '../layout/section';
 import { AnimatedGroup } from '../motion-primitives/animated-group';
 import { TextEffect } from '../motion-primitives/text-effect';
 import { Button } from '../ui/button';
-import HeroVideoDialog from '../ui/hero-video-dialog';
+import { iconSchema } from '@/tina/fields/icon';
 import { Transition } from 'motion/react';
+import confetti from 'canvas-confetti';
+
 const transitionVariants = {
   container: {
     visible: {
@@ -41,22 +42,66 @@ const transitionVariants = {
   },
 };
 
+const LlamaCard = ({ src, alt }: { src: string; alt: string }) => {
+  const cardRef = React.useRef<HTMLDivElement>(null);
+  const hasFiredRef = React.useRef(false);
+
+  const handleMouseEnter = () => {
+    if (hasFiredRef.current) return;
+    hasFiredRef.current = true;
+
+    if (cardRef.current) {
+      const rect = cardRef.current.getBoundingClientRect();
+      const x = (rect.left + rect.width / 2) / window.innerWidth;
+      const y = (rect.top + rect.height / 2) / window.innerHeight;
+
+      confetti({
+        particleCount: 80,
+        spread: 60,
+        origin: { x, y },
+        startVelocity: 25,
+        gravity: 0.8,
+        ticks: 60,
+        colors: ['#ff6b6b', '#ffd93d', '#6bcb77', '#4d96ff', '#ff922b'],
+      });
+    }
+  };
+
+  const handleMouseLeave = () => {
+    hasFiredRef.current = false;
+  };
+
+  return (
+    <div
+      ref={cardRef}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      className="relative mx-auto w-[220px] cursor-pointer select-none overflow-hidden rounded-2xl border border-zinc-200 shadow-sm shadow-zinc-950/10 bg-white"
+      style={{
+        aspectRatio: '2 / 3',
+        transition: 'transform 0.35s cubic-bezier(.22,1,.36,1), box-shadow 0.35s ease',
+      }}
+      onMouseOver={(e) => {
+        (e.currentTarget as HTMLDivElement).style.transform = 'scale(1.08) rotate(3deg)';
+        (e.currentTarget as HTMLDivElement).style.boxShadow = '0 10px 20px rgba(0,0,0,0.15)';
+      }}
+      onMouseOut={(e) => {
+        (e.currentTarget as HTMLDivElement).style.transform = 'scale(1) rotate(0deg)';
+        (e.currentTarget as HTMLDivElement).style.boxShadow = '';
+      }}
+    >
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        className="object-cover rounded-2xl pointer-events-none"
+        sizes="220px"
+      />
+    </div>
+  );
+};
+
 export const Hero = ({ data }: { data: PageBlocksHero }) => {
-  // Extract the background style logic into a more readable format
-  let gradientStyle: React.CSSProperties | undefined = undefined;
-  if (data.background) {
-    const colorName = data.background
-      .replace(/\/\d{1,2}$/, '')
-      .split('-')
-      .slice(1)
-      .join('-');
-    const opacity = data.background.match(/\/(\d{1,3})$/)?.[1] || '100';
-
-    gradientStyle = {
-      '--tw-gradient-to': `color-mix(in oklab, var(--color-${colorName}) ${opacity}%, transparent)`,
-    } as React.CSSProperties;
-  }
-
   return (
     <Section background={data.background!}>
       <div className='text-center sm:mx-auto lg:mr-auto lg:mt-0'>
@@ -90,46 +135,15 @@ export const Hero = ({ data }: { data: PageBlocksHero }) => {
         </AnimatedGroup>
       </div>
 
-      {data.image && (
+      {data.image?.src && (
         <AnimatedGroup variants={transitionVariants}>
-          <div className='relative -mr-56 mt-8 overflow-hidden px-2 sm:mr-0 sm:mt-12 md:mt-20 max-w-full' data-tina-field={tinaField(data, 'image')}>
-            <div aria-hidden className='bg-linear-to-b absolute inset-0 z-10 from-transparent from-35% pointer-events-none' style={gradientStyle} />
-            <div className='inset-shadow-2xs ring-background dark:inset-shadow-white/20 bg-background relative mx-auto max-w-6xl overflow-hidden rounded-2xl border p-4 shadow-lg shadow-zinc-950/15 ring-1'>
-              <ImageBlock image={data.image} />
-            </div>
+          <div className='mt-12 flex justify-center' data-tina-field={tinaField(data, 'image')}>
+            <LlamaCard src={data.image.src} alt={data.image.alt || 'Llama'} />
           </div>
         </AnimatedGroup>
       )}
     </Section>
   );
-};
-
-const ImageBlock = ({ image }: { image: PageBlocksHeroImage }) => {
-  if (image.videoUrl) {
-    let videoId = '';
-    if (image.videoUrl) {
-      const embedPrefix = '/embed/';
-      const idx = image.videoUrl.indexOf(embedPrefix);
-      if (idx !== -1) {
-        videoId = image.videoUrl.substring(idx + embedPrefix.length).split('?')[0];
-      }
-    }
-    const thumbnailSrc = image.src ? image.src! : videoId ? `https://i3.ytimg.com/vi/${videoId}/maxresdefault.jpg` : '';
-
-    return <HeroVideoDialog videoSrc={image.videoUrl} thumbnailSrc={thumbnailSrc} thumbnailAlt='Hero Video' />;
-  }
-
-  if (image.src) {
-    return (
-      <Image
-        className='z-2 border-border/25 aspect-15/8 relative rounded-2xl border max-w-full h-auto'
-        alt={image!.alt || ''}
-        src={image!.src!}
-        height={4000}
-        width={3000}
-      />
-    );
-  }
 };
 
 export const heroBlockSchema: Template = {
@@ -140,7 +154,6 @@ export const heroBlockSchema: Template = {
     defaultItem: {
       tagline: "Here's some text above the other text",
       headline: 'This Big Text is Totally Awesome',
-      text: 'Phasellus scelerisque, libero eu finibus rutrum, risus risus accumsan libero, nec molestie urna dui a leo.',
     },
   },
   fields: [
@@ -210,12 +223,6 @@ export const heroBlockSchema: Template = {
           name: 'alt',
           label: 'Alt Text',
           type: 'string',
-        },
-        {
-          name: 'videoUrl',
-          label: 'Video URL',
-          type: 'string',
-          description: 'If using a YouTube video, make sure to use the embed version of the video URL',
         },
       ],
     },

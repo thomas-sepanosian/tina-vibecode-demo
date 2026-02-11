@@ -23,6 +23,9 @@ importers:
       '@tailwindcss/typography':
         specifier: ^0.5.19
         version: 0.5.19(tailwindcss@4.1.15)
+      canvas-confetti:
+        specifier: ^1.9.4
+        version: 1.9.4
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -93,6 +96,9 @@ importers:
       '@tinacms/cli':
         specifier: ^2.1.5
         version: 2.1.5(@codemirror/language@6.0.0)(@types/node@22.18.12)(@types/react@18.3.26)(abstract-level@1.0.4)(immer@10.1.1)(lightningcss@1.30.2)(react-dnd-html5-backend@16.0.1)(react-dnd@16.0.1(@types/hoist-non-react-statics@3.3.5)(@types/node@22.18.12)(@types/react@18.3.26)(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rollup@3.29.4)(scheduler@0.26.0)(slate-dom@0.114.0(slate@0.114.0))(slate@0.114.0)(sucrase@3.35.0)(use-sync-external-store@1.5.0(react@18.3.1))
+      '@types/canvas-confetti':
+        specifier: ^1.9.0
+        version: 1.9.0
       '@types/js-cookie':
         specifier: ^3.0.6
         version: 3.0.6
@@ -2800,6 +2806,9 @@ packages:
   '@types/acorn@4.0.6':
     resolution: {integrity: sha512-veQTnWP+1D/xbxVrPC3zHnCZRjSrKfhbMUlEA43iMZLu7EsnTtkJklIuwrCPbOi8YkvDQAiW05VQQFvvz9oieQ==}
 
+  '@types/canvas-confetti@1.9.0':
+    resolution: {integrity: sha512-aBGj/dULrimR1XDZLtG9JwxX1b4HPRF6CX9Yfwh3NvstZEm1ZL7RBnel4keCPSqs1ANRu1u2Aoz9R+VmtjYuTg==}
+
   '@types/codemirror@0.0.90':
     resolution: {integrity: sha512-8Z9+tSg27NPRGubbUPUCrt5DDG/OWzLph5BvcDykwR5D7RyZh5mhHG0uS1ePKV1YFCA+/cwc4Ey2AJAEFfV3IA==}
 
@@ -3424,6 +3433,9 @@ packages:
 
   caniuse-lite@1.0.30001760:
     resolution: {integrity: sha512-7AAMPcueWELt1p3mi13HR/LHH0TJLT11cnwDJEs3xA4+CK/PLKeO9Kl1oru24htkyUKtkGCvAx4ohB0Ttry8Dw==}
+
+  canvas-confetti@1.9.4:
+    resolution: {integrity: sha512-yxQbJkAVrFXWNbTUjPqjF7G+g6pDotOUHGbkZq2NELZUMDpiJ85rIEazVb8GTaAptNW2miJAXbs1BtioA251Pw==}
 
   capital-case@1.0.4:
     resolution: {integrity: sha512-ds37W8CytHgwnhGGTi88pcPyR15qoNkOpYwmMMfnWqqWgESapLqvDx6huFjQ5vqWSn2Z06173XNA7LtMOeUh1A==}
@@ -9642,6 +9654,8 @@ snapshots:
     dependencies:
       '@types/estree': 1.0.5
 
+  '@types/canvas-confetti@1.9.0': {}
+
   '@types/codemirror@0.0.90':
     dependencies:
       '@types/tern': 0.23.9
@@ -10423,6 +10437,8 @@ snapshots:
   caniuse-lite@1.0.30001707: {}
 
   caniuse-lite@1.0.30001760: {}
+
+  canvas-confetti@1.9.4: {}
 
   capital-case@1.0.4:
     dependencies:
