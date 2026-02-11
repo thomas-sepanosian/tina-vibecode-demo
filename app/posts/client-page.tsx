@@ -50,7 +50,7 @@ export default function PostsClientPage(props: ClientPostProps) {
               Blog Posts
             </h2>
             <p className="mx-auto max-w-2xl text-muted-foreground md:text-lg">
-              Discover the latest insights and tutorials about modern web development, UI design, and component-driven architecture.
+              Notes on my research in IoT, AI, wearable computing, and software engineering.
             </p>
           </div>
 
