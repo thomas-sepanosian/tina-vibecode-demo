@@ -5,6 +5,36 @@ import { tinaField } from 'tinacms/dist/react';
 import { PageBlocksTerminal } from '../../tina/__generated__/types';
 import { Section, sectionBlockSchemaField } from '../layout/section';
 import { TerminalThemePicker } from '../../tina/fields/terminal-theme';
+import { AnimatedGroup } from '../motion-primitives/animated-group';
+import { Transition } from 'motion/react';
+
+const transitionVariants = {
+  container: {
+    visible: {
+      transition: {
+        staggerChildren: 0.05,
+        delayChildren: 0.75,
+      },
+    },
+  },
+  item: {
+    hidden: {
+      opacity: 0,
+      filter: 'blur(12px)',
+      y: 12,
+    },
+    visible: {
+      opacity: 1,
+      filter: 'blur(0px)',
+      y: 0,
+      transition: {
+        type: 'spring',
+        bounce: 0.3,
+        duration: 1.5,
+      } as Transition,
+    },
+  },
+};
 
 const themes: Record<string, { bg: string; titleBar: string; text: string; dot1: string; dot2: string; dot3: string }> = {
   matrix: {
@@ -48,70 +78,72 @@ export const Terminal = ({ data }: { data: PageBlocksTerminal }) => {
 
   return (
     <Section background={data.background!}>
-      <div className="mx-auto max-w-2xl">
-        {/* Window frame */}
-        <div
-          style={{
-            borderRadius: '12px',
-            overflow: 'hidden',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.25)',
-            border: '1px solid rgba(255,255,255,0.08)',
-          }}
-        >
-          {/* Title bar */}
+      <AnimatedGroup variants={transitionVariants}>
+        <div className="mx-auto max-w-2xl">
+          {/* Window frame */}
           <div
             style={{
-              background: theme.titleBar,
-              padding: '10px 14px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
+              borderRadius: '12px',
+              overflow: 'hidden',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.25)',
+              border: '1px solid rgba(255,255,255,0.08)',
             }}
           >
-            <span style={{ width: 12, height: 12, borderRadius: '50%', background: theme.dot1, display: 'inline-block' }} />
-            <span style={{ width: 12, height: 12, borderRadius: '50%', background: theme.dot2, display: 'inline-block' }} />
-            <span style={{ width: 12, height: 12, borderRadius: '50%', background: theme.dot3, display: 'inline-block' }} />
-            {data.title && (
-              <span
-                data-tina-field={tinaField(data, 'title')}
-                style={{
-                  color: theme.text,
-                  opacity: 0.6,
-                  fontSize: '13px',
-                  fontFamily: 'monospace',
-                  marginLeft: '8px',
-                }}
-              >
-                {data.title}
-              </span>
-            )}
-          </div>
-
-          {/* Console */}
-          <div
-            style={{
-              background: theme.bg,
-              padding: '20px',
-              minHeight: '120px',
-            }}
-          >
-            <pre
-              data-tina-field={tinaField(data, 'content')}
+            {/* Title bar */}
+            <div
               style={{
-                color: theme.text,
-                fontFamily: '"SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace',
-                fontSize: '14px',
-                lineHeight: 1.7,
-                margin: 0,
-                whiteSpace: 'pre-wrap',
-                wordBreak: 'break-word',
+                background: theme.titleBar,
+                padding: '10px 14px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
               }}
             >
-              {data.content}
-            </pre>
+              <span style={{ width: 12, height: 12, borderRadius: '50%', background: theme.dot1, display: 'inline-block' }} />
+              <span style={{ width: 12, height: 12, borderRadius: '50%', background: theme.dot2, display: 'inline-block' }} />
+              <span style={{ width: 12, height: 12, borderRadius: '50%', background: theme.dot3, display: 'inline-block' }} />
+              {data.title && (
+                <span
+                  data-tina-field={tinaField(data, 'title')}
+                  style={{
+                    color: theme.text,
+                    opacity: 0.6,
+                    fontSize: '13px',
+                    fontFamily: 'monospace',
+                    marginLeft: '8px',
+                  }}
+                >
+                  {data.title}
+                </span>
+              )}
+            </div>
+
+            {/* Console */}
+            <div
+              style={{
+                background: theme.bg,
+                padding: '20px',
+                minHeight: '120px',
+              }}
+            >
+              <pre
+                data-tina-field={tinaField(data, 'content')}
+                style={{
+                  color: theme.text,
+                  fontFamily: '"SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace',
+                  fontSize: '14px',
+                  lineHeight: 1.7,
+                  margin: 0,
+                  whiteSpace: 'pre-wrap',
+                  wordBreak: 'break-word',
+                }}
+              >
+                {data.content}
+              </pre>
+            </div>
           </div>
         </div>
-      </div>
+      </AnimatedGroup>
     </Section>
   );
 };
