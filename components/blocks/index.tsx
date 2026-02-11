@@ -7,6 +7,7 @@ import { Testimonial } from "./testimonial";
 import { Video } from "./video";
 import { Callout } from "./callout";
 import { Stats } from "./stats";
+import { Terminal } from "./terminal";
 import { CallToAction } from "./call-to-action";
 
 export const Blocks = (props: Omit<Page, "id" | "_sys" | "_values">) => {
@@ -42,6 +43,8 @@ const Block = (block: PageBlocks) => {
       return <Testimonial data={block} />;
     case "PageBlocksCta":
       return <CallToAction data={block} />;
+    case "PageBlocksTerminal":
+      return <Terminal data={block} />;
     default:
       return null;
   }
